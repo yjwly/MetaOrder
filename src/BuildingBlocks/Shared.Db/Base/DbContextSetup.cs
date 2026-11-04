@@ -59,7 +59,7 @@ namespace Shared.Db.Base
             {
                 db.QueryFilter.AddTableFilter<TenantEntity>(x =>
                     x.TenantId == tc.TenantId);
-                db.QueryFilter.AddTableFilter<TenantEntity>(x =>
+                db.QueryFilter.AddTableFilter<CompanyEntity>(x =>
                     x.CompanyId == tc.CompanyId);
                 db.QueryFilter.AddTableFilter<TenantEntity>(x =>
                     x.IsDeleted == false);

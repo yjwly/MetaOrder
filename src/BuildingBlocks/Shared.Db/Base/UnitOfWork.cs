@@ -19,16 +19,28 @@ namespace Shared.Db.Base
             _db = db;
         }
 
+        /// <summary>
+        /// 开始业务
+        /// </summary>
+        /// <returns></returns>
         public async Task BeginTransactionAsync()
         {
             await _db.Ado.BeginTranAsync();
         }
 
+        /// <summary>
+        /// 提交业务
+        /// </summary>
+        /// <returns></returns>
         public async Task CommitAsync()
         {
             await _db.Ado.CommitTranAsync();
         }
 
+        /// <summary>
+        /// 回滚业务
+        /// </summary>
+        /// <returns></returns>
         public async Task RollbackAsync()
         {
             await _db.Ado.RollbackTranAsync();

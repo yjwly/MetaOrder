@@ -2,10 +2,12 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using Shared.Db.Base;
-using Shared.Web;
+using Shared.Web.Base;
 using System.Reflection;
 using static Shared.Db.Base.DbContextSetup;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,17 +17,35 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.AddMetaOrderSerilog();
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<GlobalExceptionFilter>();
+});
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 //配置swagger文档
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title="权限认证服务",
-        Version="v1",
-        Description="用户登录、Token 签发、权限校验",
+        Title = "权限认证服务",
+        Version = "v1",
+        Description = "用户登录、Token 签发、权限校验"
+    });
+
+    // 加 JWT 认证
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT Authorization header using the Bearer scheme.",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT"
+    });
+    options.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+    {
+        [new OpenApiSecuritySchemeReference("Bearer", document)] = new List<string>()
     });
     //  XML 注释
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -40,6 +60,20 @@ builder.Services.AddScoped<SharedKernel.ITenantContext, SharedKernel.TenantConte
 builder.Services.AddMateOrder(builder.Configuration);
 //添加 redis缓存
 builder.Services.AddMaterOrderRedis(builder.Configuration);
+// 添加 OpenIddict OAuth2
+builder.Services.AddOpenIddict()
+    .AddServer(options =>
+    {
+        options.SetTokenEndpointUris("/connect/token");
+        options.AllowPasswordFlow();
+        options.AllowRefreshTokenFlow();
+        options.AcceptAnonymousClients();
+        options.AddDevelopmentEncryptionCertificate()
+               .AddDevelopmentSigningCertificate();
+        options.UseAspNetCore()
+               .EnableTokenEndpointPassthrough();
+    });
+
 //添加 JWT 认证
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>

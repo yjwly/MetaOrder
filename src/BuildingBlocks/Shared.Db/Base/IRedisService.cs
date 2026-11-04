@@ -11,9 +11,33 @@ namespace Shared.Db.Base
     /// </summary>
     public interface IRedisService
     {
+        /// <summary>
+        /// 获取值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         Task<string?> GetAsync(string key);
+        /// <summary>
+        /// 设置值
+        /// </summary>
+        /// <param name="key">键</param>
+        /// <param name="value">值</param>
+        /// <param name="ttl">过期时间</param>
+        /// <returns></returns>
         Task SetAsync(string key, string value, TimeSpan ttl);
+        /// <summary>
+        /// 根据键移除值
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         Task<bool> RemoveAsync(string key);
+
+        /// <summary>
+        /// 加分布式锁
+        /// </summary>
+        /// <param name="key">键</param>
+        /// <param name="ttlSeconds">过期时间</param>
+        /// <returns></returns>
         Task<IDisposable?> LockAsync(string key, int ttlSeconds = 10);
     }
 }
