@@ -34,9 +34,12 @@ builder.Services.AddSwaggerGen(options =>
 });
 //拿当前用户登录
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<SharedKernel.ITenantContext, SharedKernel.TenantContext>();
 
 //添加 SqlSugar 数据库连接（存用户、角色、菜单）
 builder.Services.AddMateOrder(builder.Configuration);
+//添加 redis缓存
+builder.Services.AddMaterOrderRedis(builder.Configuration);
 //添加 JWT 认证
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
