@@ -4,7 +4,7 @@
   <Project Path="../src/BuildingBlocks/Shared.Mq/Shared.Mq.csproj" />
   <Project Path="../src/BuildingBlocks/Shared.Web/Shared.Web.csproj" />
   <Project Path="../src/BuildingBlocks/SharedKernel/SharedKernel.csproj" />
-  <Project Path="../src/Services/AuthServer/AuthServer.csproj" />
+  <Project Path="../src/Services/AuthService/AuthService.csproj" />
   <Project Path="../src/Services/ErpService/ErpService.csproj" />
   <Project Path="../src/Services/MesService/MesService.csproj" />
   <Project Path="../src/Services/SystemService/SystemService.csproj" />

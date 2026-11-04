@@ -17,4 +17,12 @@
     <ProjectReference Include="..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Infra\Entities\" />
+    <Folder Include="Infra\Repositories\" />
+    <Folder Include="Infra\Dtos\" />
+    <Folder Include="Service\" />
+  </ItemGroup>
+
 </Project>
