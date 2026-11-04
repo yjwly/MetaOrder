@@ -31,24 +31,26 @@
 - **uni-app** - 移动端报工 / 巡检
 
 ## 项目结构
-MetaOrder/
-├── src/
-│   ├── BuildingBlocks/          # 共享基础设施
-│   │   ├── SharedKernel/        # 枚举、基类、接口
-│   │   ├── Shared.Db/           # SqlSugar 封装、Redis、工作单元
-│   │   ├── Shared.Web/          # Serilog、Swagger 配置
-│   │   ├── Shared.Mq/           # RabbitMQ 封装
-│   │   └── Shared.Clients/      # Refit 跨服务调用
-│   ├── Services/                # 业务服务
-│   │   ├── AuthService/         # 认证服务 :5001
-│   │   ├── SystemService/        # 系统管理 :5002
-│   │   ├── ErpService/           # ERP 业务 :5100
-│   │   └── MesService/           # MES 生产 :5200
-│   └── Gateways/
-│       └── WebGateway/          # YARP 网关 :8080
-├── web-erp/                     # Vue3 Web 前端
-├── desktop-mes/                 # WPF 桌面端
-└── mobile-app/                  # uni-app 移动端
+## 项目结构
+
+- **src/** - 源代码
+  - **BuildingBlocks/** - 共享基础设施
+    - SharedKernel - 枚举、基类、接口
+    - Shared.Db - SqlSugar封装、Redis、工作单元
+    - Shared.Web - Serilog、Swagger配置
+    - Shared.Mq - RabbitMQ封装
+    - Shared.Clients - Refit跨服务调用
+  - **Services/** - 业务服务
+    - AuthService - 认证服务 :5001
+    - SystemService - 系统管理 :5002
+    - ErpService - ERP业务 :5100
+    - MesService - MES生产 :5200
+  - **Gateways/** - 网关
+    - WebGateway - YARP网关 :8080
+- **web-erp/** - Vue3 Web前端
+- **desktop-mes/** - WPF桌面端
+- **mobile-app/** - uni-app移动端
+
 
 ## 核心功能
 
