@@ -41,14 +41,14 @@ MetaOrder/
 │   │   └── Shared.Clients/      # Refit 跨服务调用
 │   ├── Services/                # 业务服务
 │   │   ├── AuthService/         # 认证服务 :5001
-│   │   ├── SystemService/       # 系统管理 :5002
-│   │   ├── ErpService/          # ERP 业务 :5100
-│   │   └── MesService/          # MES 生产 :5200
+│   │   ├── SystemService/        # 系统管理 :5002
+│   │   ├── ErpService/           # ERP 业务 :5100
+│   │   └── MesService/           # MES 生产 :5200
 │   └── Gateways/
-│       └── WebGateway/         # YARP 网关 :8080
+│       └── WebGateway/          # YARP 网关 :8080
 ├── web-erp/                     # Vue3 Web 前端
-├── desktop-mes/                  # WPF 桌面端
-└── mobile-app/                   # uni-app 移动端
+├── desktop-mes/                 # WPF 桌面端
+└── mobile-app/                  # uni-app 移动端
 
 ## 核心功能
 
