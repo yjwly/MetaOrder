@@ -7,6 +7,9 @@ using Shared.Db.Base;
 using Shared.Web.Base;
 using System.Reflection;
 using System.Text;
+using SystemService.Other;
+using SharedKernel.Helper;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +25,8 @@ builder.Services.AddControllers(options =>
     // 全局异常过滤器
     options.Filters.Add<GlobalExceptionFilter>();
 });
+
+
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -76,6 +81,11 @@ builder.Services.AddMateOrder(builder.Configuration);
 builder.Services.AddMaterOrderRedis(builder.Configuration);
 
 builder.Services.AddAuthorization();
+//注入Api路径
+builder.Host.ConfigureContainer<ContainerBuilder>(container =>
+{
+    container.RegisterType<AppInitializer>().SingleInstance();
+});
 
 // 配置 Autofac 自动注册
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
@@ -97,6 +107,20 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+// 注册到 Consul
+await app.RegisterConsul("SystemService", 5002);
+
+// 退出时注销
+app.Lifetime.ApplicationStopped.Register(async () =>
+{
+    await app.DeregisterConsul("SystemService");
+});
+// 启动时初始化API资源
+using (var scope = app.Services.CreateScope())
+{
+    var initializer = scope.ServiceProvider.GetRequiredService<AppInitializer>();
+    await initializer.InitApiResourcesAsync();
 }
 
 app.UseHttpsRedirection();

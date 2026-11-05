@@ -12,7 +12,7 @@ namespace SystemService.Controllers.Role;
 /// 角色管理
 /// </summary>
 [ApiController]
-[Route("api/[controller]/[action]")]
+[Route("api/system/[controller]/[action]")]
 [Authorize]
 public class RoleController : ControllerBase
 {

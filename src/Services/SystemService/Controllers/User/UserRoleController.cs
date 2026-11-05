@@ -11,7 +11,7 @@ namespace SystemService.Controllers.User
     /// <summary>
     /// 用户角色关联表
     /// </summary>
-    [Route("api/[controller]/[action]")]
+    [Route("api/system/UserRole/[action]")]
     [ApiController]
     [Authorize]
     public class UserRoleController : ControllerBase

@@ -7,6 +7,8 @@ using Shared.Db.Base;
 using Shared.Web.Base;
 using System.Reflection;
 using static Shared.Db.Base.DbContextSetup;
+using SharedKernel.Helper;
+using AuthService.Other;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -89,7 +91,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddAuthorization();
-
+//注入Api路径
+builder.Host.ConfigureContainer<ContainerBuilder>(container =>
+{
+    container.RegisterType<AppInitializer>().SingleInstance();
+});
 // 配置 Autofac 自动注册
 builder.Host.ConfigureContainer<ContainerBuilder>(container =>
 {
@@ -108,6 +114,20 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+}
+// 注册到 Consul
+await app.RegisterConsul("AuthService", 5001);
+
+// 退出时注销
+app.Lifetime.ApplicationStopped.Register(async () =>
+{
+    await app.DeregisterConsul("AuthService");
+});
+// 启动时初始化API资源
+using (var scope = app.Services.CreateScope())
+{
+    var initializer = scope.ServiceProvider.GetRequiredService<AppInitializer>();
+    await initializer.InitApiResourcesAsync();
 }
 app.UseAuthentication();
 app.UseAuthorization();

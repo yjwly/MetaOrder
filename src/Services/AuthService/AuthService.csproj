@@ -24,8 +24,4 @@
     <ProjectReference Include="..\..\BuildingBlocks\SharedKernel\SharedKernel.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Infra\Entities\" />
-  </ItemGroup>
-
 </Project>

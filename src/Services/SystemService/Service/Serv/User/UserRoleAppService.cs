@@ -77,7 +77,7 @@ namespace SystemService.Service.Serv.User
                 };
 
                 // 查这个角色下的用户
-                var userIds = await _userRoleRepo.GetUserIdsByRoleIdAsync(role.Id);
+                var userIds = await _userRoleRepo.GetRoleIdsByUserIdAsync(role.Id);
 
                 foreach (var userId in userIds)
                 {

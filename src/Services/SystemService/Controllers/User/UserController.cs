@@ -12,7 +12,7 @@ namespace SystemService.Controllers.User;
 /// 用户管理
 /// </summary>
 [ApiController]
-[Route("api/[controller]/[action]")]
+[Route("api/system/User/[action]")]
 [Authorize]
 public class UserController : ControllerBase
 {

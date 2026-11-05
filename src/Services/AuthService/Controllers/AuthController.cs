@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AuthService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth/[action]")]
     [ApiController]
     public class AuthController : ControllerBase
     {
