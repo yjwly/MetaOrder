@@ -21,7 +21,7 @@
 - **Redis** - 缓存 / 分布式锁
 - **RabbitMQ** - 消息队列
 - **Serilog** - 日志框架
-- **JWT + OAuth2** - 认证授权
+- **JWT** - 认证授权
 - **YARP** - API 网关
 - **Consul** - 服务注册发现
 
