@@ -112,91 +112,30 @@ dotnet run
               │ RabbitMQ│  消息
               └─────────┘
 #Nginx配置
-worker_processes auto;
-
-events {
-    worker_connections 1024;
+# 上游服务定义
+upstream yarp_server {
+    server 127.0.0.1:8080;
 }
 
-http {
-    include       mime.types;
-    default_type  application/octet-stream;
-    sendfile      on;
-    keepalive_timeout 65;
+server {
+    listen 80;
+    server_name localhost;
 
-    # 日志格式
-    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
-                      '$status $body_bytes_sent "$http_referer" '
-                      '"$http_user_agent" "$http_x_forwarded_for"';
-
-    access_log  logs/access.log  main;
-
-    # 上游服务定义
-    upstream auth_server {
-        server 127.0.0.1:5001;
+    # Web 前端静态文件
+    location / {
+        root   html/web-erp;
+        index  index.html index.htm;
+        try_files $uri $uri/ /index.html;
     }
 
-    upstream system_server {
-        server 127.0.0.1:5002;
-    }
-
-    upstream erp_server {
-        server 127.0.0.1:5100;
-    }
-
-    upstream mes_server {
-        server 127.0.0.1:5200;
-    }
-
-    # Web ERP 前端静态文件
-    server {
-        listen 80;
-        server_name localhost;
-
-        # Web 前端静态文件
-        location / {
-            root   html/web-erp;
-            index  index.html index.htm;
-            try_files $uri $uri/ /index.html;
-        }
-
-        # 认证服务
-        location /api/auth/ {
-            proxy_pass http://auth_server;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # 系统管理服务
-        location /api/system/ {
-            proxy_pass http://system_server;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # ERP 业务服务
-        location /api/erp/ {
-            proxy_pass http://erp_server;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # MES 生产服务
-        location /api/mes/ {
-            proxy_pass http://mes_server;
-            proxy_set_header Host $host;
-            proxy_set_header X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        }
-
-        # Swagger 文档（开发环境用）
-        location /swagger/ {
-            proxy_pass http://auth_server;
-        }
+    # 所有 API 都转发到 YARP
+    location /api/ {
+        proxy_pass http://yarp_server;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 }
+
 
 
