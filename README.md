@@ -198,6 +198,5 @@ http {
         }
     }
 }
-<img width="1283" height="977" alt="image" src="https://github.com/user-attachments/assets/17729084-91a0-45de-ba4f-b04077de1d8a" />
 
 
